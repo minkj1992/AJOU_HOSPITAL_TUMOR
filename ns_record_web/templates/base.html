@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="신경외과 환자정보 등록 시스템입니다.">
+    <meta name="author" content="아주대학교 의과대학 의료정보학과">
+
+    <title>신경외과 환자정보 등록 시스템</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type='text/css' href="{% static 'vendor/bootstrap-4.2.1.min.css' %}">
+    <!-- Date Range Picker CSS http://www.daterangepicker.com/ -->
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/daterangepicker.css' %}"/>
+
+    <!--
+    이 템플릿을 확장 (extend) 한 템플릿들이 head 블록에 추가적인 CSS 및 JS 를 포함할 수 있도록 구현
+    -->
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    {% if mode %}
+        <a class="navbar-brand" href="{% url 'patient-list' mode=mode %}">{{ mode|title }}</a>
+    {% else %}
+        <a class="navbar-brand" href="{% url 'index' %}">NS</a>
+    {% endif %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+                {% if mode %}
+                    <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">입력 DB 선택</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'wizard' mode=mode step_number=1 patient_id="0" %}">새로운 환자 추가
+                            <span
+                                    class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'patient-list' mode=mode %}">환자 목록</a>
+                    </li>
+                {% else %}
+                    {% if is_trauma_group %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'patient-list' mode='trauma' %}">Trauma <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                    {% endif %}
+                    {% if is_tumor_group %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'patient-list' mode='tumor' %}">Tumor</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}님 환영합니다
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'profile' %}">프로필</a>
+                        {% if user.is_superuser or user.is_staff %}
+                            <a class="dropdown-item" href="{% url 'admin:index' %}">관리자</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+<script type="text/javascript" src="{% static 'vendor/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor/daterangepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vendor/moment-duration-format.min.js' %}"></script>
+{% block script %}
+{% endblock %}
+</body>
+</html>

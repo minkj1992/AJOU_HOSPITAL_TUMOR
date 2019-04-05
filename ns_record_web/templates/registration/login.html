@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <div class="starter-template">
+            <form method="post">
+                {% csrf_token %}
+                {% comment %}
+                    아래처럼 crispy 템플릿 필터로 폼 스타일을 변경할 수 있음
+                    https://django-crispy-forms.readthedocs.io/en/latest/filters.html
+                {% endcomment %}
+                {{ form|crispy }}
+                <input type="submit" value="로그인" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+{% endblock content %}

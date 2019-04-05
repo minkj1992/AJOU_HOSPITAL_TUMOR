@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+    <link href="{% static 'vendor/smart_wizard.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+    <div id="smartwizard" class="sw-main sw-theme-default">
+        {% include 'include/step_anchor.html' %}
+
+        <form action="." method="post">
+            <input type="submit" class="btn btn-primary" value="저장">
+            {% csrf_token %}
+            {% if patient_info %}
+                <div class="form-group">
+                    <label for="patient">Patient</label>
+                    <input type="text" class="form-control" id="patient" value="{{ patient_info }}" disabled>
+                </div>
+            {% endif %}
+
+            {% crispy form %}
+{#            <input type="submit" class="btn btn-primary" value="저장">#}
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        var stepNumber = {{ step_number|safe }}; // step_number 를 JS에서 쓰기 위해서 template engine 쪽에서 넣어줌
+        var detailFields = [
+            // detail field 는 길어서 방해가 될 수 있으므로 값이 Other 일때만 활성화 되도록 조정
+            ['education', 'employment', 'insurance', 'nationality', 'race', 'income', 'marriage', 'religion'],
+            ['type_admission', 'transfer_method', 'pre_admission', 'type_of_injury', 'place_of_injury', 'drug_intoxication', 'cause_of_injury'],
+            [],
+            [],
+            [],
+            ['hemorrhage_position_detail', 'vascular_detail', 'penetrating_detail', 'penetrating_detail', 'fore_detail'],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ];
+
+        detailFields[stepNumber - 1].forEach(function (value) {
+            // 실제로 detail field 를 숨기고 여는 코드
+            var div = $("#div_id_" + value + '_detail');
+            var select = $("#id_" + value);
+
+            var divShowHide = function () {
+                if (select.val() === 'Other') {
+                    div.show();
+                } else {
+                    div.hide();
+                }
+            };
+
+            divShowHide();
+            select.change(divShowHide);
+        });
+
+        $("#id_patient").attr('disabled', true);
+
+        // stepNumber 별로 폼의 동작을 정해주는 코드
+        switch (stepNumber) {
+            case 1:
+                var birthday = $("#id_birthday");
+                var admissionDate = $("#id_admission_date");
+                var calculate_age = function (end, start) {
+                    var months = moment(end).diff(start, 'months');
+                    var yearAge = Math.floor(months / 12);
+                    var monthAge = months % 12;
+
+                    return yearAge + "년 " + monthAge + "개월";
+                };
+
+                $("#id_age").val(calculate_age(admissionDate.val(), birthday.val()));
+
+                // daterangepicker는 달력을 띄우는 코드
+                admissionDate.daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                }, function (start) {
+                    $("#id_age").val(calculate_age(start, birthday.val()));
+                });
+
+                // 달력으로 입력했을 때 포맷에 맞춰 날짜를 입력하기 위함
+                admissionDate.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                });
+
+                // 달력에서 취소 버튼을 눌렀을 때
+                admissionDate.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+
+                // 생일 입력시 달력 설정
+                birthday.daterangepicker({
+                    singleDatePicker: true,
+                    autoUpdateInput: false,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                }, function (start) {
+                    // admission date 로 나이 계산하기
+                    $("#id_age").val(calculate_age(admissionDate.val(), start));
+                });
+
+                birthday.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                });
+
+                birthday.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+
+                break;
+            case 2:
+                var durationFormat = 'd일 h시간 m분';
+                var range = $('#id_injury_and_arrival_date_range');
+
+                // differ 입력시 범위를 계산하기 위한 함수
+                function initRange() {
+                    var range_split = range.val().split('-');
+                    var start = range_split.slice(0, 3).join('-');
+                    var end = range_split.slice(3).join('-');
+                    $("#id_differ").val(moment.duration(moment(end).diff(start)).format(durationFormat));
+                }
+
+                initRange();
+                range.change(initRange);
+
+                /*
+                range.daterangepicker({
+                    timePicker: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD H:mm'
+                    }
+                }, function (start, end) {
+                    $("#id_differ").val(moment.duration(moment(end).diff(start)).format(durationFormat));
+                });
+
+                range.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD H:mm') + '-' + picker.endDate.format('YYYY-MM-DD H:mm'));
+                });
+
+                range.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+                */
+                break;
+            case 3:
+                var non_tbi_surgery_date = $("#id_non_tbi_surgery_date");
+
+                non_tbi_surgery_date.daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                });
+
+                non_tbi_surgery_date.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                });
+
+                non_tbi_surgery_date.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+                break;
+            case 5:
+                ['arr', 'wor'].forEach(function (type) {
+                    var date = $("#id_" + type + "_date");
+
+                    date.daterangepicker({
+                        timePicker: true,
+                        singleDatePicker: true,
+                        autoUpdateInput: false,
+                        locale: {
+                            format: 'YYYY-MM-DD H:mm'
+                        }
+                    });
+
+                    date.on('apply.daterangepicker', function (ev, picker) {
+                        $(this).val(picker.startDate.format('YYYY-MM-DD H:mm'));
+                    });
+
+                    date.on('cancel.daterangepicker', function () {
+                        $(this).val('');
+                    });
+
+                    // 자동으로 수치를 계산하기 위한 코드
+                    ['eye', 'verbal', 'motor'].forEach(function (sub_type) {
+                        $("#id_" + type + '_' + sub_type).change(function () {
+                            var eye_val = $('#id_' + type + '_eye').val();
+                            var verbal_val = $('#id_' + type + '_verbal').val();
+                            var motor_val = $("#id_" + type + '_motor').val();
+
+                            $('#id_' + type + '_total').val(eye_val + "/" + verbal_val + "/" + motor_val);
+
+                            var rts_gcs = parseInt(eye_val) + parseInt(verbal_val) + parseInt(motor_val);
+
+                            $('#id_' + type + '_sum').val(rts_gcs);
+
+                            var rts_high = $('#id_' + type + '_sbp').val();
+                            var rts_breath = $('#id_' + type + '_rr').val();
+
+                            var rri = 0;
+                            var sbpi = 0;
+                            var gcsi = 0;
+
+                            if (rts_high >= 90 && rts_high <= 300) sbpi = 4;
+                            else if (rts_high >= 76 && rts_high <= 89) sbpi = 3;
+                            else if (rts_high >= 50 && rts_high <= 75) sbpi = 2;
+                            else if (rts_high >= 1 && rts_high <= 49) sbpi = 1;
+                            else if (rts_high === 0) sbpi = 0;
+
+                            if (rts_breath >= 10 && rts_breath <= 29) rri = 4;
+                            else if (rts_breath >= 30 && rts_breath <= 80) rri = 3;
+                            else if (rts_breath >= 6 && rts_breath <= 9) rri = 2;
+                            else if (rts_breath >= 1 && rts_breath <= 5) rri = 1;
+                            else if (rts_breath === 0) rri = 0;
+
+                            if (rts_gcs === 3) gcsi = 0;
+                            else if (rts_gcs >= 4 && rts_gcs <= 5) gcsi = 1;
+                            else if (rts_gcs >= 6 && rts_gcs <= 8) gcsi = 2;
+                            else if (rts_gcs >= 9 && rts_gcs <= 12) gcsi = 3;
+                            else if (rts_gcs >= 13 && rts_gcs <= 15) gcsi = 4;
+
+                            // rts
+                            $('#id_' + type + '_rts').val(sbpi * 0.7326 + rri * 0.2908 + gcsi * 0.9368);
+                        });
+                    });
+                });
+                break;
+            case 7:
+                // IIS Score는 각 요쇼의 제곱을 더한것
+                var scoreAttributes = ['#id_head_neck', '#id_face', '#id_chest', '#id_abdomen', '#id_extremity', '#id_external'];
+
+                scoreAttributes.forEach(function (value) {
+                    $(value).change(function () {
+                        $('#id_iss_score').val(scoreAttributes.map(function (id) {
+                            var score = $(id).val();
+                            return score * score;
+                        }).reduce(function (accumulator, currentValue) {
+                            return accumulator + currentValue;
+                        }));
+                    });
+                });
+
+                break;
+            case 8:
+                ['#id_icp_start_date', '#id_icp_end_date', '#id_evd_start_date', '#id_evd_end_date',
+                    '#id_jb_start_date', '#id_jb_end_date', '#id_bis_start_date', '#id_bis_end_date'].forEach(
+                    function (id) {
+                        $(id).daterangepicker({
+                            singleDatePicker: true,
+                            showDropdowns: true,
+                            autoUpdateInput: false,
+                            locale: {
+                                format: 'YYYY-MM-DD'
+                            }
+                        });
+
+                        $(id).on('apply.daterangepicker', function (ev, picker) {
+                            $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                        });
+
+                        $(id).on('cancel.daterangepicker', function () {
+                            $(this).val('');
+                        });
+                    });
+                break;
+            case 9:
+                ['#id_orroom_date', '#id_surgery_start_date', '#id_surgery_end_date'].forEach(function (id) {
+                    $(id).daterangepicker({
+                        timePicker: true,
+                        singleDatePicker: true,
+                        autoUpdateInput: false,
+                        locale: {
+                            format: 'YYYY-MM-DD H:mm'
+                        }
+                    });
+
+                    $(id).on('apply.daterangepicker', function (ev, picker) {
+                        $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                    });
+
+                    $(id).on('cancel.daterangepicker', function () {
+                        $(this).val('');
+                    });
+                });
+
+                break;
+            case 11:
+                var discharge_date = $("#id_discharge_date");
+
+                discharge_date.daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                });
+
+                discharge_date.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                });
+
+                discharge_date.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+                break;
+            case 12:
+                var date = $("#id_date");
+                date.daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        cancelLabel: 'Clear'
+                    }
+                });
+
+                date.on('apply.daterangepicker', function (ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                });
+
+                date.on('cancel.daterangepicker', function () {
+                    $(this).val('');
+                });
+
+                var gcss = [$("#id_gcs_eye"), $("#id_gcs_verbal"), $("#id_gcs_motor")];
+
+                var initValues = function () {
+                    var eye_val = gcss[0].val();
+                    var verbal_val = gcss[1].val();
+                    var motor_val = gcss[2].val();
+                    $("#id_gcs_total").val(eye_val + '/' + verbal_val + '/' + motor_val);
+                    $("#id_gcs_sum").val(parseInt(eye_val) + parseInt(verbal_val) + parseInt(motor_val));
+                };
+
+                initValues();
+
+                gcss.forEach(function (value) {
+                    value.change(initValues);
+                });
+                break;
+        }
+    </script>
+{% endblock %}

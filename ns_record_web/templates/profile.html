@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <ul>
+            <li>아이디: {{ user.username }}</li>
+            <li>권한
+                <ul>
+                    {% for group in groups %}
+                        <li>{{ group }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

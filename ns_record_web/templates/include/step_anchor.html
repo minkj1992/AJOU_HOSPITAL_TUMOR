@@ -1,0 +1,55 @@
+{% comment %}
+    각 Step 별로 Step 이름 및 설명 그리고 폼으로 이동하는 링크를 표시하기 위한 파일이다.
+    이 파일은 wizard.html 과 object_list.html 에서 동시에 사용되므로 각 템플릿에서 포함해서 사용함
+{% endcomment %}
+<style>
+    .sw-theme-default > ul.step-anchor > li.invalid > a {
+        color: black;
+        cursor: pointer;
+    }
+
+    .sw-theme-default > ul.step-anchor > li.invalid > a::after {
+        background: darkgray;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+
+    .sw-theme-default > ul.step-anchor > li.invalid > a {
+        color: black;
+        cursor: pointer;
+    }
+
+    .sw-theme-default > ul.step-anchor > li.invalid > a::after {
+        background: darkgray;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+
+    .sw-theme-default > ul.step-anchor > li.not-done > a {
+        color: black;
+        cursor: pointer;
+    }
+
+    .sw-theme-default > ul.step-anchor > li.not-done > a::after {
+        background: red;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+    }
+</style>
+<ul class="nav nav-tabs step-anchor">
+    {% for desc, check in step_descriptions %}
+        {% comment %}
+            CHECK에 따라서 class 를 빠구면 smart-wizard css 에서 색깔이 바뀌게 됨
+        {% endcomment %}
+        <li class="nav-item {% if forloop.counter == step_number %}active{% elif check == 2 %}invalid{% elif check == 1 %}not-done{% else %}done{% endif %}">
+            <a href="{% url 'wizard' step_number=forloop.counter mode=mode patient_id=patient_id %}"
+               class="nav-link">Step {{ forloop.counter }}
+                <br/>
+                <small>{{ desc }}</small>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

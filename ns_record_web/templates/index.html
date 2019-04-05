@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <div class="btn-group-vertical">
+            <a href="{% url 'patient-list' mode='trauma' %}" class="btn btn-outline-primary btn-lg">Trauma</a>
+            <br>
+            <a href="{% url 'patient-list' mode='tumor' %}" class="btn btn-outline-primary btn-lg">Tumor</a>
+        </div>
+    </div>
+{% endblock %}

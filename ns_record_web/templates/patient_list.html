@@ -1,0 +1,566 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>{{ mode|title }} Patients</h1>
+    <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#patient-search"
+            aria-expanded="false" aria-controls="patient-search-control">
+        환자 검색하기
+    </button>
+
+    <div class="collapse" id="patient-search">
+        <form action="" method="get">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="patient-tab" data-toggle="tab" href="#patient" role="tab"
+                       aria-controls="patient" aria-selected="true">Patient</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="trauma-tab" data-toggle="tab" href="#trauma" role="tab"
+                       aria-controls="trauma" aria-selected="false">Trauma</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="combine-tab" data-toggle="tab" href="#combine" role="tab"
+                       aria-controls="combine" aria-selected="false">Combine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab"
+                       aria-controls="history" aria-selected="false">History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="gcs-tab" data-toggle="tab" href="#gcs" role="tab"
+                       aria-controls="gcs" aria-selected="false">GCS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="diagnosis-tab" data-toggle="tab" href="#diagnosis" role="tab"
+                       aria-controls="diagnosis" aria-selected="false">Diagnosis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="injury-tab" data-toggle="tab" href="#injury" role="tab"
+                       aria-controls="injury" aria-selected="false">Injury</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="monitor-tab" data-toggle="tab" href="#monitor" role="tab"
+                       aria-controls="monitor" aria-selected="false">Monitor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="surgery-tab" data-toggle="tab" href="#surgery" role="tab"
+                       aria-controls="surgery" aria-selected="false">Surgery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="non-surgical-treatment-tab" data-toggle="tab" href="#non-surgical-treatment"
+                       role="tab"
+                       aria-controls="non-surgical-treatment" aria-selected="false">Non Surgical Treatment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="treatment-tab" data-toggle="tab" href="#treatment" role="tab"
+                       aria-controls="treatment" aria-selected="false">Treatment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="assessment-tab" data-toggle="tab" href="#assessment" role="tab"
+                       aria-controls="assessment" aria-selected="false">Assessment</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="patient" role="tabpanel" aria-labelledby="patient-tab">
+                    {{ patient_filter_form.name.label }}
+                    {{ patient_filter_form.name }}
+                    {{ patient_filter_form.doctor.label }}
+                    {{ patient_filter_form.doctor }}
+                    {{ patient_filter_form.gender.label }}
+                    {{ patient_filter_form.gender }}
+                    <br>
+                    {{ patient_filter_form.admission_date.label }}
+                    {{ patient_filter_form.admission_date }}
+                    {{ patient_filter_form.admission_date__gt.label }}
+                    {{ patient_filter_form.admission_date__gt }}
+                    {{ patient_filter_form.admission_date__lt.label }}
+                    {{ patient_filter_form.admission_date__lt }}
+                    <br>
+                    {{ patient_filter_form.address.label }}
+                    {{ patient_filter_form.address }}
+                    {{ patient_filter_form.education.label }}
+                    {{ patient_filter_form.education }}
+                    {{ patient_filter_form.insurance.label }}
+                    {{ patient_filter_form.education }}
+                    <br>
+                    {{ patient_filter_form.insurance.label }}
+                    {{ patient_filter_form.insurance }}
+                    {{ patient_filter_form.nationality.label }}
+                    {{ patient_filter_form.nationality }}
+                    {{ patient_filter_form.race.label }}
+                    {{ patient_filter_form.race }}
+                    {{ patient_filter_form.income.label }}
+                    {{ patient_filter_form.income }}
+                    {{ patient_filter_form.marriage.label }}
+                    {{ patient_filter_form.marriage }}
+                    {{ patient_filter_form.residence.label }}
+                    {{ patient_filter_form.residence }}
+                    {{ patient_filter_form.handedness.label }}
+                    {{ patient_filter_form.handedness }}
+                    {{ patient_filter_form.religion.label }}
+                    {{ patient_filter_form.religion }}
+                </div>
+                <div class="tab-pane fade" id="trauma" role="tabpanel" aria-labelledby="trauma-tab">
+                    {{ patient_filter_form.type_admission.label }}
+                    {{ patient_filter_form.type_admission }}
+                    {{ patient_filter_form.transfer_method.label }}
+                    {{ patient_filter_form.transfer_method }}
+                    {{ patient_filter_form.pre_admission.label }}
+                    {{ patient_filter_form.pre_admission }}
+                    <br>
+                    {{ patient_filter_form.type_of_injury.label }}
+                    {{ patient_filter_form.type_of_injury }}
+                    {{ patient_filter_form.place_of_injury.label }}
+                    {{ patient_filter_form.place_of_injury }}
+                    {{ patient_filter_form.drug_intoxication.label }}
+                    {{ patient_filter_form.drug_intoxication }}
+                    {{ patient_filter_form.cause_of_injury.label }}
+                    {{ patient_filter_form.cause_of_injury }}
+                </div>
+                <div class="tab-pane fade" id="combine" role="tabpanel" aria-labelledby="combine-tab">
+                    {{ patient_filter_form.other_major_operation.label }}
+                    {{ patient_filter_form.other_major_operation }}
+                    {{ patient_filter_form.other_major_office.label }}
+                    {{ patient_filter_form.other_major_office }}
+                    {{ patient_filter_form.non_tbi_surgery_date.label }}
+                    {{ patient_filter_form.non_tbi_surgery_date }}
+                </div>
+                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                    {{ patient_filter_form.psychiatric.label }}
+                    {{ patient_filter_form.psychiatric }}
+                    {{ patient_filter_form.cardiovascular.label }}
+                    {{ patient_filter_form.cardiovascular }}
+                    {{ patient_filter_form.endocrine.label }}
+                    {{ patient_filter_form.endocrine }}
+                    {{ patient_filter_form.spinal.label }}
+                    {{ patient_filter_form.spinal }}
+                    {{ patient_filter_form.neurologic.label }}
+                    {{ patient_filter_form.neurologic }}
+                    {{ patient_filter_form.oncologic.label }}
+                    {{ patient_filter_form.oncologic }}
+                    {{ patient_filter_form.gi.label }}
+                    {{ patient_filter_form.gi }}
+                    {{ patient_filter_form.hepatic.label }}
+                    {{ patient_filter_form.hepatic }}
+                    {{ patient_filter_form.hematologic.label }}
+                    {{ patient_filter_form.hematologic }}
+                    {{ patient_filter_form.pulmonologic.label }}
+                    {{ patient_filter_form.pulmonologic }}
+                    {{ patient_filter_form.gi.label }}
+                    {{ patient_filter_form.gi }}
+                    {{ patient_filter_form.renal.label }}
+                    {{ patient_filter_form.renal }}
+                    {{ patient_filter_form.ent.label }}
+                    {{ patient_filter_form.ent }}
+                    {{ patient_filter_form.musculoskeletal.label }}
+                    {{ patient_filter_form.musculoskeletal }}
+                    {{ patient_filter_form.developmental.label }}
+                    {{ patient_filter_form.developmental }}
+                    {{ patient_filter_form.anticoagulants.label }}
+                    {{ patient_filter_form.anticoagulants }}
+                    {{ patient_filter_form.platelet.label }}
+                    {{ patient_filter_form.platelet }}
+                </div>
+                <div class="tab-pane fade" id="gcs" role="tabpanel" aria-labelledby="gcs-tab">
+                    {{ patient_filter_form.arr_date.label }}
+                    {{ patient_filter_form.arr_date }}
+                    {{ patient_filter_form.arr_status.label }}
+                    {{ patient_filter_form.arr_status }}
+                    {{ patient_filter_form.arr_sbp.label }}
+                    {{ patient_filter_form.arr_sbp }}
+                    {{ patient_filter_form.arr_dbp.label }}
+                    {{ patient_filter_form.arr_dbp }}
+                    {{ patient_filter_form.arr_hr.label }}
+                    {{ patient_filter_form.arr_hr }}
+                    {{ patient_filter_form.arr_rr.label }}
+                    {{ patient_filter_form.arr_rr }}
+                    {{ patient_filter_form.arr_eye.label }}
+                    {{ patient_filter_form.arr_eye }}
+                    {{ patient_filter_form.arr_verbal.label }}
+                    {{ patient_filter_form.arr_verbal }}
+                    {{ patient_filter_form.arr_motor.label }}
+                    {{ patient_filter_form.arr_motor }}
+                    {{ patient_filter_form.arr_total.label }}
+                    {{ patient_filter_form.arr_total }}
+                    {{ patient_filter_form.arr_sum.label }}
+                    {{ patient_filter_form.arr_sum }}
+                    {{ patient_filter_form.arr_rts.label }}
+                    {{ patient_filter_form.arr_rts }}
+                    {{ patient_filter_form.arr_rtupper.label }}
+                    {{ patient_filter_form.arr_rtupper }}
+                    {{ patient_filter_form.arr_ltupper.label }}
+                    {{ patient_filter_form.arr_ltupper }}
+                    {{ patient_filter_form.arr_rtlower.label }}
+                    {{ patient_filter_form.arr_rtlower }}
+                    {{ patient_filter_form.arr_pp_right.label }}
+                    {{ patient_filter_form.arr_pp_right }}
+                    {{ patient_filter_form.arr_pp_left.label }}
+                    {{ patient_filter_form.arr_pp_left }}
+                    {{ patient_filter_form.arr_pp_rtsize.label }}
+                    {{ patient_filter_form.arr_pp_rtsize }}
+                    {{ patient_filter_form.arr_pp_ltsize.label }}
+                    {{ patient_filter_form.arr_pp_ltsize }}
+                    {{ patient_filter_form.arr_pp_rtshape.label }}
+                    {{ patient_filter_form.arr_pp_rtshape }}
+                    {{ patient_filter_form.arr_pp_ltshape.label }}
+                    {{ patient_filter_form.arr_pp_ltshape }}
+                    {{ patient_filter_form.arr_pp_rtprompt.label }}
+                    {{ patient_filter_form.arr_pp_rtprompt }}
+                    {{ patient_filter_form.arr_pp_ltprompt.label }}
+                    {{ patient_filter_form.arr_pp_ltprompt }}
+                    {{ patient_filter_form.arr_coa_correction.label }}
+                    {{ patient_filter_form.arr_coa_correction }}
+                    {{ patient_filter_form.arr_coa_blood.label }}
+                    {{ patient_filter_form.arr_coa_blood }}
+                    {{ patient_filter_form.wor_date.label }}
+                    {{ patient_filter_form.wor_date }}
+                    {{ patient_filter_form.wor_status.label }}
+                    {{ patient_filter_form.wor_status }}
+                    {{ patient_filter_form.wor_sbp.label }}
+                    {{ patient_filter_form.wor_sbp }}
+                    {{ patient_filter_form.wor_dbp.label }}
+                    {{ patient_filter_form.wor_dbp }}
+                    {{ patient_filter_form.wor_hr.label }}
+                    {{ patient_filter_form.wor_hr }}
+                    {{ patient_filter_form.wor_rr.label }}
+                    {{ patient_filter_form.wor_rr }}
+                    {{ patient_filter_form.wor_eye.label }}
+                    {{ patient_filter_form.wor_eye }}
+                    {{ patient_filter_form.wor_verbal.label }}
+                    {{ patient_filter_form.wor_verbal }}
+                    {{ patient_filter_form.wor_total.label }}
+                    {{ patient_filter_form.wor_total }}
+                    {{ patient_filter_form.wor_sum.label }}
+                    {{ patient_filter_form.wor_sum }}
+                    {{ patient_filter_form.wor_rts.label }}
+                    {{ patient_filter_form.wor_rts }}
+                    {{ patient_filter_form.wor_rtupper.label }}
+                    {{ patient_filter_form.wor_rtupper }}
+                    {{ patient_filter_form.wor_ltupper.label }}
+                    {{ patient_filter_form.wor_ltupper }}
+                    {{ patient_filter_form.wor_rtlower.label }}
+                    {{ patient_filter_form.wor_rtlower }}
+                    {{ patient_filter_form.wor_ltlower.label }}
+                    {{ patient_filter_form.wor_ltlower }}
+                    {{ patient_filter_form.wor_pp_right.label }}
+                    {{ patient_filter_form.wor_pp_right }}
+                    {{ patient_filter_form.wor_pp_left.label }}
+                    {{ patient_filter_form.wor_pp_left }}
+                    {{ patient_filter_form.wor_pp_rtsize.label }}
+                    {{ patient_filter_form.wor_pp_rtsize }}
+                    {{ patient_filter_form.wor_pp_ltsize.label }}
+                    {{ patient_filter_form.wor_pp_ltsize }}
+                    {{ patient_filter_form.wor_pp_rtshape.label }}
+                    {{ patient_filter_form.wor_pp_rtshape }}
+                    {{ patient_filter_form.wor_pp_ltshape.label }}
+                    {{ patient_filter_form.wor_pp_ltshape }}
+                    {{ patient_filter_form.wor_pp_ltprompt.label }}
+                    {{ patient_filter_form.wor_pp_ltprompt }}
+                    {{ patient_filter_form.wor_coa_correction.label }}
+                    {{ patient_filter_form.wor_coa_correction }}
+                    {{ patient_filter_form.wor_coa_blood.label }}
+                    {{ patient_filter_form.wor_coa_blood }}
+                    {{ patient_filter_form.wounds.label }}
+                    {{ patient_filter_form.wounds }}
+                </div>
+                <div class="tab-pane fade" id="diagnosis" role="tabpanel" aria-labelledby="diagnosis-tab">
+                    {{ patient_filter_form.diagnosis.label }}
+                    {{ patient_filter_form.diagnosis }}
+                    {{ patient_filter_form.primary_code.label }}
+                    {{ patient_filter_form.primary_code }}
+                    {{ patient_filter_form.primary_name.label }}
+                    {{ patient_filter_form.primary_name }}
+                    {{ patient_filter_form.skull.label }}
+                    {{ patient_filter_form.skull }}
+                    {{ patient_filter_form.injury_position.label }}
+                    {{ patient_filter_form.injury_position }}
+                    {{ patient_filter_form.hemorrhage.label }}
+                    {{ patient_filter_form.hemorrhage }}
+                    {{ patient_filter_form.hemorrhage_injury_position.label }}
+                    {{ patient_filter_form.hemorrhage_injury_position }}
+                    {{ patient_filter_form.hemorrhage_position.label }}
+                    {{ patient_filter_form.hemorrhage_position }}
+                    {{ patient_filter_form.diffuse.label }}
+                    {{ patient_filter_form.diffuse }}
+                    {{ patient_filter_form.vascular.label }}
+                    {{ patient_filter_form.vascular }}
+                    {{ patient_filter_form.penetrating.label }}
+                    {{ patient_filter_form.penetrating }}
+                    {{ patient_filter_form.fore.label }}
+                    {{ patient_filter_form.fore }}
+                </div>
+                <div class="tab-pane fade" id="injury" role="tabpanel" aria-labelledby="injury-tab">
+                    {{ patient_filter_form.head_neck.label }}
+                    {{ patient_filter_form.head_neck }}
+                    {{ patient_filter_form.face.label }}
+                    {{ patient_filter_form.face }}
+                    {{ patient_filter_form.chest.label }}
+                    {{ patient_filter_form.chest }}
+                    {{ patient_filter_form.abdomen.label }}
+                    {{ patient_filter_form.abdomen }}
+                    {{ patient_filter_form.extremity.label }}
+                    {{ patient_filter_form.extremity }}
+                    {{ patient_filter_form.external.label }}
+                    {{ patient_filter_form.external }}
+                    {{ patient_filter_form.iss_score.label }}
+                    {{ patient_filter_form.iss_score }}
+                    {{ patient_filter_form.marshall_score.label }}
+                    {{ patient_filter_form.marshall_score }}
+                </div>
+                <div class="tab-pane fade" id="monitor" role="tabpanel" aria-labelledby="monitor-tab">
+                    {{ patient_filter_form.icp_timing.label }}
+                    {{ patient_filter_form.icp_timing }}
+                    {{ patient_filter_form.icp_type.label }}
+                    {{ patient_filter_form.icp_type }}
+                    {{ patient_filter_form.icp_start_date.label }}
+                    {{ patient_filter_form.icp_start_date }}
+                    {{ patient_filter_form.icp_end_date.label }}
+                    {{ patient_filter_form.icp_end_date }}
+                    {{ patient_filter_form.icp_location.label }}
+                    {{ patient_filter_form.icp_location }}
+                    {{ patient_filter_form.icp_reason.label }}
+                    {{ patient_filter_form.icp_reason }}
+                    {{ patient_filter_form.evd_timing.label }}
+                    {{ patient_filter_form.evd_timing }}
+                    {{ patient_filter_form.evd_start_date.label }}
+                    {{ patient_filter_form.evd_start_date }}
+                    {{ patient_filter_form.evd_end_date.label }}
+                    {{ patient_filter_form.evd_end_date }}
+                    {{ patient_filter_form.evd_location.label }}
+                    {{ patient_filter_form.evd_location }}
+                    {{ patient_filter_form.evd_reason.label }}
+                    {{ patient_filter_form.evd_reason }}
+                    {{ patient_filter_form.jb_timing.label }}
+                    {{ patient_filter_form.jb_timing }}
+                    {{ patient_filter_form.jb_start_date.label }}
+                    {{ patient_filter_form.jb_start_date }}
+                    {{ patient_filter_form.jb_end_date.label }}
+                    {{ patient_filter_form.jb_end_date }}
+                    {{ patient_filter_form.jb_location.label }}
+                    {{ patient_filter_form.jb_location }}
+                    {{ patient_filter_form.jb_reason.label }}
+                    {{ patient_filter_form.jb_reason }}
+                    {{ patient_filter_form.bis_timing.label }}
+                    {{ patient_filter_form.bis_timing }}
+                    {{ patient_filter_form.bis_start_date.label }}
+                    {{ patient_filter_form.bis_start_date }}
+                    {{ patient_filter_form.bis_end_date.label }}
+                    {{ patient_filter_form.bis_end_date }}
+                    {{ patient_filter_form.bis_location.label }}
+                    {{ patient_filter_form.bis_location }}
+                    {{ patient_filter_form.bis_reason.label }}
+                    {{ patient_filter_form.bis_reason }}
+                </div>
+                <div class="tab-pane fade" id="surgery" role="tabpanel" aria-labelledby="surgery-tab">
+                    {{ patient_filter_form.surgery_no.label }}
+                    {{ patient_filter_form.surgery_no }}
+                    {{ patient_filter_form.aim.label }}
+                    {{ patient_filter_form.aim }}
+                    {{ patient_filter_form.typeof.label }}
+                    {{ patient_filter_form.typeof }}
+                    {{ patient_filter_form.direction.label }}
+                    {{ patient_filter_form.direction }}
+                    {{ patient_filter_form.intraevd.label }}
+                    {{ patient_filter_form.intraevd }}
+                    {{ patient_filter_form.intrasono.label }}
+                    {{ patient_filter_form.intrasono }}
+                    {{ patient_filter_form.surgery_name.label }}
+                    {{ patient_filter_form.surgery_name }}
+                    {{ patient_filter_form.surgery_result.label }}
+                    {{ patient_filter_form.surgery_result }}
+                    {{ patient_filter_form.orroom_date.label }}
+                    {{ patient_filter_form.orroom_date }}
+                    {{ patient_filter_form.surgery_start_date.label }}
+                    {{ patient_filter_form.surgery_start_date }}
+                    {{ patient_filter_form.surgery_end_date.label }}
+                    {{ patient_filter_form.surgery_end_date }}
+                    {{ patient_filter_form.blood_loss.label }}
+                    {{ patient_filter_form.blood_loss }}
+                    {{ patient_filter_form.ffp.label }}
+                    {{ patient_filter_form.ffp }}
+                    {{ patient_filter_form.prbc.label }}
+                    {{ patient_filter_form.prbc }}
+                    {{ patient_filter_form.plt.label }}
+                    {{ patient_filter_form.plt }}
+                    {{ patient_filter_form.duroplasty.label }}
+                    {{ patient_filter_form.duroplasty }}
+                </div>
+                <div class="tab-pane fade" id="non-surgical-treatment" role="tabpanel"
+                     aria-labelledby="non-surgical-treatment-tab">
+                    {{ patient_filter_form.sedation.label }}
+                    {{ patient_filter_form.sedation }}
+                    {{ patient_filter_form.hypothermia.label }}
+                    {{ patient_filter_form.hypothermia }}
+                    {{ patient_filter_form.hyperosmolar.label }}
+                    {{ patient_filter_form.hyperosmolar }}
+                    {{ patient_filter_form.crrt.label }}
+                    {{ patient_filter_form.crrt }}
+                    {{ patient_filter_form.nogas.label }}
+                    {{ patient_filter_form.nogas }}
+                </div>
+                <div class="tab-pane fade" id="treatment" role="tabpanel" aria-labelledby="treatment-tab">
+                    {{ patient_filter_form.neuro.label }}
+                    {{ patient_filter_form.neuro }}
+                    {{ patient_filter_form.cardio.label }}
+                    {{ patient_filter_form.cardio }}
+                    {{ patient_filter_form.hematopoetic.label }}
+                    {{ patient_filter_form.hematopoetic }}
+                    {{ patient_filter_form.pulmonary.label }}
+                    {{ patient_filter_form.pulmonary }}
+                    {{ patient_filter_form.giab.label }}
+                    {{ patient_filter_form.giab }}
+                    {{ patient_filter_form.wound.label }}
+                    {{ patient_filter_form.wound }}
+                    {{ patient_filter_form.lab.label }}
+                    {{ patient_filter_form.lab }}
+                    {{ patient_filter_form.infection.label }}
+                    {{ patient_filter_form.infection }}
+                    {{ patient_filter_form.othercomp.label }}
+                    {{ patient_filter_form.othercomp }}
+                    {{ patient_filter_form.discharge_type.label }}
+                    {{ patient_filter_form.discharge_type }}
+                    {{ patient_filter_form.causedeath.label }}
+                    {{ patient_filter_form.causedeath }}
+                    {{ patient_filter_form.discharge_date.label }}
+                    {{ patient_filter_form.discharge_date }}
+                </div>
+                <div class="tab-pane fade" id="assessment" role="tabpanel" aria-labelledby="assessment-tab">
+                    {{ patient_filter_form.resultno.label }}
+                    {{ patient_filter_form.resultno }}
+                    {{ patient_filter_form.date.label }}
+                    {{ patient_filter_form.date }}
+                    {{ patient_filter_form.gcs_eye.label }}
+                    {{ patient_filter_form.gcs_eye }}
+                    {{ patient_filter_form.gcs_verbal.label }}
+                    {{ patient_filter_form.gcs_verbal }}
+                    {{ patient_filter_form.gcs_motor.label }}
+                    {{ patient_filter_form.gcs_motor }}
+                    {{ patient_filter_form.gcs_total.label }}
+                    {{ patient_filter_form.gcs_total }}
+                    {{ patient_filter_form.gcs_sum.label }}
+                    {{ patient_filter_form.gcs_sum }}
+                    {{ patient_filter_form.mmse.label }}
+                    {{ patient_filter_form.mmse }}
+                    {{ patient_filter_form.gose.label }}
+                    {{ patient_filter_form.gose }}
+                    {{ patient_filter_form.bathel.label }}
+                    {{ patient_filter_form.bathel }}
+                    {{ patient_filter_form.drs.label }}
+                    {{ patient_filter_form.drs }}
+                    {{ patient_filter_form.mrs.label }}
+                    {{ patient_filter_form.mrs }}
+                </div>
+            </div>
+            <input type="submit" name="search" class="btn btn-info" value="검색"/>
+            <input type="submit" name="csv-download" class="btn btn-success" value="CSV로 다운로드"/>
+            <button class="btn btn-danger" id="resetSearchFormButton">폼 초기화</button>
+        </form>
+    </div>
+
+    <p>전체 환자 {{ count }}명 중 현재 검색된 환자 수는 {{ search_count }}명 입니다.</p>
+    {% if patients.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-left">
+                {% if patients.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ patients.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#"><span>&laquo;</span></a></li>
+                {% endif %}
+                {% with lower=patients.number|add:'-3' upper=patients.number|add:'3' %}
+                    {% for i in patients.paginator.page_range %}
+                        {% if patients.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% elif i > lower and i < upper or forloop.first or forloop.last %}
+                            {% if 'name' in request.get_full_path %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% elif i == lower or i == upper %}
+                            {% if 'name' in request.get_full_path %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="{{ request.get_full_path }}&page={{ i }}">...</a>
+
+                                    {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">...</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+
+                {% if patients.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ patients.next_page_number }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#"><span>&raquo;</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            {% if 'name' in request.get_full_path %}
+                <th>입원날짜 <a href="{{ request.get_full_path }}&sort_admission_date=up"><i class="fa fa-fw fa-sort"></i></a></th>
+            {% else %}
+                <th>입원날짜 <a href="?sort_admission_date=up"><i class="fa fa-fw fa-sort"></i></a></th>
+            {% endif %}
+            <th>환자ID <a href="#"><i class="fa fa-fw fa-sort"></i></a></th>
+            <th>이름 <a href="#"><i class="fa fa-fw fa-sort"></i></a></th>
+            {% if mode == 'trauma' %}
+                <th>주치의 <a href="#"><i class="fa fa-fw fa-sort"></i></a></th>
+            {% endif %}
+            <th>Step</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for patient in patients %}
+            <tr>
+                <td>{% if mode == 'trauma' %}{{ patient.admission_date }}{% else %}{{ patient.yearno }}{% endif %}</td>
+                <td>{% if mode == 'trauma' %}{{ patient.patient_id }}{% else %}{{ patient.id }}{% endif %}</td>
+                <td>{{ patient.name }}</td>
+                {% if mode == 'trauma' %}
+                    <td>{{ patient.doctor }}</td>{% endif %}
+                <td>
+                    <ul class="pagination">
+                        {% for check in patient.checks %}
+                            <li class="page-item">
+                                {% if mode == 'trauma' %}
+                                    <a class="page-link"
+                                       href="{% url 'wizard' mode=mode step_number=forloop.counter patient_id=patient.patient_id %}">
+                                        <span style="color: {{ check }}; ">
+
+                                            {{ forloop.counter }} {% if forloop.counter == 9 or forloop.counter == 12 %}({{ check }}건){% endif %}
+                                        </span>
+                                    </a>
+                                {% else %}
+                                    <a class="page-link"
+                                       href="{% url 'wizard' mode=mode step_number=forloop.counter patient_id=patient.pk %}">
+                                        {{ check }}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+        $("#resetSearchFormButton").click(function (event) {
+            event.preventDefault();
+            $("form")[0].reset();
+        });
+    </script>
+{% endblock %}
